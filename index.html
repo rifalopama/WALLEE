@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WALLE — aplikasi pencatatan keuangan pribadi. Catat pemasukan, pengeluaran, pantau saldo dan arus kas bulananmu." />
+  <meta name="theme-color" content="#08090a" />
+  <title>WALLE</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="WALLE beranda">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/icons/icon-192.png" alt="" width="44" height="44" />
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">WALLE</span>
+          <span class="brand-tag">Catatan keuangan pribadi</span>
+        </span>
+      </a>
+      <nav class="topnav" aria-label="Navigasi utama">
+        <a class="topnav-link is-active" href="#dashboard">Dashboard</a>
+        <a class="topnav-link" href="#tabungan">Tabungan</a>
+      </nav>
+      <div class="topbar-meta">
+        <span class="pill">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          Data lokal
+        </span>
+        <span class="pill pill-date" id="todayChip"></span>
+      </div>
+    </header>
+
+    <main id="dashboard">
+      <section class="stats" aria-label="Ringkasan keuangan">
+        <article class="stat-card stat-balance">
+          <div class="stat-head">
+            <span class="stat-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a2 2 0 0 1 2 2v1" />
+                <rect x="3" y="7" width="18" height="12" rx="2.5" />
+                <path d="M16 13h.01" />
+              </svg>
+            </span>
+            <span>Total saldo</span>
+          </div>
+          <p class="stat-value" id="balanceValue">Rp 0</p>
+          <p class="stat-note" id="balanceNote">Bulan ini · Rp 0</p>
+        </article>
+
+        <article class="stat-card stat-income">
+          <div class="stat-head">
+            <span class="stat-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 7 7 17" />
+                <path d="M17 17H7V7" />
+              </svg>
+            </span>
+            <span>Total pemasukan</span>
+          </div>
+          <p class="stat-value" id="incomeValue">Rp 0</p>
+          <p class="stat-note" id="incomeNote">Bulan ini · Rp 0</p>
+        </article>
+
+        <article class="stat-card stat-expense">
+          <div class="stat-head">
+            <span class="stat-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17 17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
+            </span>
+            <span>Total pengeluaran</span>
+          </div>
+          <p class="stat-value" id="expenseValue">Rp 0</p>
+          <p class="stat-note" id="expenseNote">Bulan ini · Rp 0</p>
+        </article>
+      </section>
+
+      <div class="workspace">
+        <section class="panel form-panel" aria-labelledby="formTitle">
+          <div class="panel-head">
+            <div>
+              <h2 id="formTitle">Tambah transaksi</h2>
+              <p class="panel-sub">Catat pemasukan atau pengeluaran baru.</p>
+            </div>
+          </div>
+
+          <form id="transactionForm" data-type="income" novalidate>
+            <div class="field">
+              <span class="field-label" id="typeLabel">Jenis transaksi</span>
+              <div class="segmented" role="group" aria-labelledby="typeLabel">
+                <button type="button" class="type-btn" data-form-type="income" aria-pressed="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M17 7 7 17" />
+                    <path d="M17 17H7V7" />
+                  </svg>
+                  Pemasukan
+                </button>
+                <button type="button" class="type-btn" data-form-type="expense" aria-pressed="false">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M7 17 17 7" />
+                    <path d="M7 7h10v10" />
+                  </svg>
+                  Pengeluaran
+                </button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="amountInput">Nominal</label>
+              <div class="input-shell">
+                <span class="input-prefix">Rp</span>
+                <input id="amountInput" class="has-prefix" type="number" inputmode="numeric" min="1" step="1" placeholder="0" autocomplete="off" required />
+              </div>
+              <p class="field-error" id="amountError" role="alert" hidden></p>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="categorySelect">Kategori</label>
+                <select id="categorySelect" required></select>
+                <p class="field-error" id="categoryError" role="alert" hidden></p>
+              </div>
+              <div class="field">
+                <label for="dateInput">Tanggal</label>
+                <input id="dateInput" type="date" required />
+                <p class="field-error" id="dateError" role="alert" hidden></p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="noteInput">Catatan <span class="optional">(opsional)</span></label>
+              <input id="noteInput" type="text" maxlength="60" placeholder="Contoh: Makan siang di kantor" autocomplete="off" />
+            </div>
+
+            <button type="submit" class="btn-primary" id="submitBtn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+              </svg>
+              <span>Simpan transaksi</span>
+            </button>
+          </form>
+        </section>
+
+        <div class="content">
+          <section class="panel chart-panel" aria-labelledby="chartTitle">
+            <div class="panel-head chart-head">
+              <div>
+                <h2 id="chartTitle">Arus kas bulanan</h2>
+                <p class="panel-sub">Pemasukan dan pengeluaran dalam 6 bulan terakhir.</p>
+              </div>
+              <div class="legend" aria-hidden="true">
+                <span class="legend-item income"><i></i>Pemasukan</span>
+                <span class="legend-item expense"><i></i>Pengeluaran</span>
+              </div>
+            </div>
+            <div class="chart-wrap" id="chartWrap">
+              <canvas id="cashflowChart" role="img" aria-label="Grafik batang arus kas bulanan 6 bulan terakhir"></canvas>
+              <div class="chart-tooltip" id="chartTooltip" hidden></div>
+              <div class="chart-empty" id="chartEmpty" hidden>
+                <p>Belum ada data grafik</p>
+                <span>Grafik akan muncul setelah kamu mencatat transaksi.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel history-panel" aria-labelledby="historyTitle">
+            <div class="panel-head history-head">
+              <div>
+                <h2 id="historyTitle">Riwayat transaksi</h2>
+                <p class="panel-sub" id="historySub">Semua transaksi tersimpan di perangkat ini.</p>
+              </div>
+              <span class="count-badge" id="historyCount">0 transaksi</span>
+            </div>
+
+            <div class="toolbar">
+              <div class="input-shell search-shell">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" />
+                </svg>
+                <input id="searchInput" type="search" placeholder="Cari transaksi, kategori, nominal..." aria-label="Cari transaksi" autocomplete="off" />
+              </div>
+              <select id="typeFilter" aria-label="Filter jenis transaksi">
+                <option value="all">Semua jenis</option>
+                <option value="income">Pemasukan</option>
+                <option value="expense">Pengeluaran</option>
+              </select>
+              <select id="categoryFilter" aria-label="Filter kategori">
+                <option value="all">Semua kategori</option>
+              </select>
+            </div>
+
+            <div class="tx-list" id="transactionList" aria-live="polite"></div>
+          </section>
+        </div>
+      </div>
+
+      <section class="panel savings-panel" id="tabungan" aria-labelledby="savingsTitle">
+        <div class="panel-head savings-head">
+          <div>
+            <h2 id="savingsTitle">Tabungan</h2>
+            <p class="panel-sub">Sisihkan uang untuk target impianmu dan pantau progresnya.</p>
+          </div>
+          <button type="button" class="btn-accent" id="addSavingsBtn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+              <path d="M12 5v14" />
+              <path d="M5 12h14" />
+            </svg>
+            <span>Tambah target</span>
+          </button>
+        </div>
+
+        <div class="savings-summary" aria-label="Ringkasan tabungan">
+          <article class="savings-stat savings-stat-total">
+            <span class="savings-stat-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="6" rx="7" ry="3" />
+                <path d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6" />
+                <path d="M5 12v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+              </svg>
+            </span>
+            <span>
+              <span class="savings-stat-label">Total ditabung</span>
+              <span class="savings-stat-value" id="savingsTotalValue">Rp 0</span>
+            </span>
+          </article>
+          <article class="savings-stat">
+            <span class="savings-stat-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="4.5" />
+                <circle cx="12" cy="12" r="1" />
+              </svg>
+            </span>
+            <span>
+              <span class="savings-stat-label">Target berjalan</span>
+              <span class="savings-stat-value" id="savingsActiveValue">0 target</span>
+            </span>
+          </article>
+          <article class="savings-stat">
+            <span class="savings-stat-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.1V12a10 10 0 1 1-5.93-9.14" />
+                <path d="m9 11 3 3L22 4" />
+              </svg>
+            </span>
+            <span>
+              <span class="savings-stat-label">Target tercapai</span>
+              <span class="savings-stat-value" id="savingsDoneValue">0 target</span>
+            </span>
+          </article>
+        </div>
+
+        <div class="savings-grid" id="savingsList" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-credit">
+        <p class="credit-brand">WALLE – Catatan Keuangan Pribadi</p>
+        <p class="credit-author">Designed &amp; Developed by M. RIFAL OPAMA LUBIS</p>
+      </div>
+      <p class="footer-note">Data hanya tersimpan di browser perangkat ini (localStorage).</p>
+    </footer>
+  </div>
+
+  <!-- Modal edit transaksi -->
+  <div class="modal" id="editModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="editTitle">Edit transaksi</h2>
+          <p class="panel-sub">Perbarui detail transaksi pilihanmu.</p>
+        </div>
+        <button type="button" class="icon-btn modal-close" data-close-modal aria-label="Tutup dialog">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="editForm" data-type="income" novalidate>
+        <div class="field">
+          <span class="field-label">Jenis transaksi</span>
+          <div class="segmented" role="group" aria-label="Jenis transaksi">
+            <button type="button" class="type-btn" data-edit-type="income" aria-pressed="true">Pemasukan</button>
+            <button type="button" class="type-btn" data-edit-type="expense" aria-pressed="false">Pengeluaran</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="editAmount">Nominal</label>
+          <div class="input-shell">
+            <span class="input-prefix">Rp</span>
+            <input id="editAmount" class="has-prefix" type="number" inputmode="numeric" min="1" step="1" data-autofocus required />
+          </div>
+          <p class="field-error" id="editAmountError" role="alert" hidden></p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="editCategory">Kategori</label>
+            <select id="editCategory" required></select>
+            <p class="field-error" id="editCategoryError" role="alert" hidden></p>
+          </div>
+          <div class="field">
+            <label for="editDate">Tanggal</label>
+            <input id="editDate" type="date" required />
+            <p class="field-error" id="editDateError" role="alert" hidden></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="editNote">Catatan <span class="optional">(opsional)</span></label>
+          <input id="editNote" type="text" maxlength="60" autocomplete="off" />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" data-close-modal>Batal</button>
+          <button type="submit" class="btn-primary">Simpan perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal konfirmasi hapus -->
+  <div class="modal" id="deleteModal" hidden>
+    <div class="modal-card modal-sm" role="alertdialog" aria-modal="true" aria-labelledby="deleteTitle" aria-describedby="deleteDesc">
+      <div class="danger-icon" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+        </svg>
+      </div>
+      <h2 id="deleteTitle">Hapus transaksi?</h2>
+      <p class="modal-text" id="deleteDesc">Transaksi ini akan dihapus permanen dari riwayat dan tidak dapat dikembalikan.</p>
+      <p class="delete-summary" id="deleteSummary"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" data-close-modal data-autofocus>Batal</button>
+        <button type="button" class="btn-danger" id="confirmDeleteBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal tambah / edit target tabungan -->
+  <div class="modal" id="savingsModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="savingsModalTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="savingsModalTitle">Target tabungan baru</h2>
+          <p class="panel-sub" id="savingsModalSub">Tentukan nama target dan nominal yang ingin kamu capai.</p>
+        </div>
+        <button type="button" class="icon-btn modal-close" data-close-modal aria-label="Tutup dialog">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="savingsForm" novalidate>
+        <div class="field">
+          <label for="savingsName">Nama target</label>
+          <input id="savingsName" type="text" maxlength="40" placeholder="Contoh: Laptop, Motor, Liburan" autocomplete="off" data-autofocus />
+          <p class="field-error" id="savingsNameError" role="alert" hidden></p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="savingsTarget">Nominal target</label>
+            <div class="input-shell">
+              <span class="input-prefix">Rp</span>
+              <input id="savingsTarget" class="has-prefix" type="number" inputmode="numeric" min="1" step="1" placeholder="0" autocomplete="off" />
+            </div>
+            <p class="field-error" id="savingsTargetError" role="alert" hidden></p>
+          </div>
+          <div class="field">
+            <label for="savingsSaved">Sudah ditabung</label>
+            <div class="input-shell">
+              <span class="input-prefix">Rp</span>
+              <input id="savingsSaved" class="has-prefix" type="number" inputmode="numeric" min="0" step="1" placeholder="0" autocomplete="off" />
+            </div>
+            <p class="field-error" id="savingsSavedError" role="alert" hidden></p>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" data-close-modal>Batal</button>
+          <button type="submit" class="btn-primary">Simpan target</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal tambah dana tabungan -->
+  <div class="modal" id="savingsFundModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="savingsFundTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="savingsFundTitle">Tambah dana tabungan</h2>
+          <p class="panel-sub" id="savingsFundSub">Catat uang yang baru kamu sisihkan untuk target ini.</p>
+        </div>
+        <button type="button" class="icon-btn modal-close" data-close-modal aria-label="Tutup dialog">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="savings-modal-summary">
+        <span>Dana terkumpul saat ini</span>
+        <strong id="savingsFundCurrent">Rp 0</strong>
+      </div>
+
+      <form id="savingsFundForm" novalidate>
+        <div class="field">
+          <label for="savingsFundAmount">Nominal yang ditabung</label>
+          <div class="input-shell">
+            <span class="input-prefix">Rp</span>
+            <input id="savingsFundAmount" class="has-prefix" type="number" inputmode="numeric" min="1" step="1" placeholder="0" autocomplete="off" data-autofocus />
+          </div>
+          <p class="field-error" id="savingsFundError" role="alert" hidden></p>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" data-close-modal>Batal</button>
+          <button type="submit" class="btn-primary">Tambah dana</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal konfirmasi hapus target tabungan -->
+  <div class="modal" id="savingsDeleteModal" hidden>
+    <div class="modal-card modal-sm" role="alertdialog" aria-modal="true" aria-labelledby="savingsDeleteTitle" aria-describedby="savingsDeleteDesc">
+      <div class="danger-icon" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+        </svg>
+      </div>
+      <h2 id="savingsDeleteTitle">Hapus target tabungan?</h2>
+      <p class="modal-text" id="savingsDeleteDesc">Target beserta catatan dana tabungannya akan dihapus permanen dan tidak dapat dikembalikan.</p>
+      <p class="delete-summary" id="savingsDeleteSummary"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" data-close-modal data-autofocus>Batal</button>
+        <button type="button" class="btn-danger" id="confirmSavingsDeleteBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
